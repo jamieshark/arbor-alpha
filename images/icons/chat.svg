@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 40.1 (33804) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-Chat</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="✅✅-Supernav" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Supernavs" transform="translate(-1001.000000, -1831.000000)" fill="#0070E0">
+            <g id="icon-Chat" transform="translate(1001.000000, 1831.000000)">
+                <path d="M2.11665032,1.46441941 C4.33067575,-0.630546208 11.787448,-0.34034956 14.3564539,1.46441945 C16.9254598,3.26918846 16.0011632,9.18399741 14.3564539,10.6442722 C12.7117447,12.1045469 4.40976491,12.6403666 2.1166503,10.6442722 C-0.176464314,8.64817772 -0.0973751175,3.55938504 2.11665032,1.46441941 Z" id="Rectangle-2"></path>
+                <path d="M4.00771965,8.47503796 C3.91331808,7.37524459 4.69600146,6.73921764 5.73726998,7.10254914 C5.73726998,7.10254914 9.18455555,7.88514124 9.18455555,9.7401003 C9.18455555,11.5950594 6.03996647,14.589279 6.03996647,14.589279 C5.27613482,15.3896098 4.57977047,15.1395212 4.48599775,14.047054 L4.00771965,8.47503796 Z" id="Rectangle-2"></path>
+            </g>
+        </g>
+    </g>
+</svg>

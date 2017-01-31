@@ -1,0 +1,56 @@
+// Dividers
+// =============================================================================
+@import "../core";
+
+$arbor-divider-color: swatch('stone--sixteen') !default;
+
+// Plain divider, for use with an hr tag
+// Automatically takes up the full width of its parent
+@mixin arbor-divider-base (
+    $margin: 50px,
+    $width: 100%
+) {
+    @include arbor-item-percent($pct: $width);
+    border: none;
+    margin: $margin auto;
+}
+
+// Divider classes and dividers of varying widths
+@mixin arbor-divider (
+    $divider-class: 'divider',
+    $column-base: 24,
+    $partial-widths: (1, 2, 4, 6),
+    $max-width: $arbor-container-max-width
+) {
+  .#{$divider-class} {
+    @include arbor-divider-base;
+    border-top: 1px solid $arbor-divider-color;
+
+
+    @each $partial-width in $partial-widths {
+      $percent: percentage($partial-width / $column-base);
+      $reduced: _reduceFraction($partial-width, $column-base);
+      $fraction: #{nth($reduced, 1)}-#{nth($reduced, 2)};
+
+      &--#{$fraction} {
+        @include arbor-item-percent($pct: $percent);
+      }
+    }
+
+    @each $space-name, $val in $-arbor-spacing {
+      &--m-#{$space-name} {
+        margin: $val auto;
+      }
+    }
+
+
+    &--section {
+      border-top: 1px solid $arbor-divider-color;
+      max-width: $max-width;
+    }
+  }
+}
+
+@if $arbor-output-classes {
+    @include arbor-divider;
+}

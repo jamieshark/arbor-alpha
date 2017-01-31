@@ -1,0 +1,168 @@
+// Link Dropdown (Found almost exclusively in Supernav)
+// =============================================================================
+@import "../core";
+
+@mixin arbor-dropdown (
+    $dropdown-class: 'dropdown'
+) {
+    .#{$dropdown-class}__container {
+        @include flex-stack;
+        @include arbor-item;
+        position: relative;
+
+        .#{$dropdown-class} {
+            &__link {
+                @include flex-inline;
+                @include flex-align($y: 'middle');
+                color: swatch('stone');
+                height: 100%;
+
+                &::after {
+                    // Shapes the triangle found next to the dropdown switch
+                    content: "";
+                    display: block;
+                    width: 0;
+                    height: 0;
+                    border-left: 4px solid transparent;
+                    border-right: 4px solid transparent;
+                    border-top: 5px solid swatch('stone');
+                    position: relative;
+                    margin-left: 5px; // Space it apart from the typed switch
+                    transform: rotate(0deg);
+                    transition: transform .1s ease-in, top .1s ease-in;
+
+                    // TODO: When we move from Open Sans to Atlas, uncomment top: -2px and delete top: 0
+                    //top: -2px; // Align to Atlas's baseline
+                    top: 0; // Delete when moving from Open to Atlas
+                }
+
+                &:hover {
+                    color: swatch('ink');
+
+                    &::after {
+                        border-top: 5px solid swatch('ink');
+                        transition: transform .1s ease-in, top .1s ease-in;
+                    }
+                }
+
+                &:hover,
+                &:focus {
+                    text-decoration: none;
+                }
+
+                &--open {
+                    color: swatch('ink');
+
+                    &::after {
+                        transform: rotate(180deg);
+                        border-top: 5px solid swatch('ink');
+                        transition: transform .1s ease-in, top .1s ease-in;
+
+                        // TODO: When we move from Open Sans to Atlas,
+                        // uncomment top: -3px and delete top: -1
+                        //top: -3px; // Align to Atlas's baseline
+                        top: -1px; // Delete when moving from Open to Atlas
+                    }
+                }
+            }
+
+            &__dropdown-container {
+                // Contains the entire dropdown element. There's no visual element to this element
+                // other than positioning its children.
+                position: absolute;
+                left: 50%;
+                top: 65px;
+                z-index: 1; // Proper overlap
+                visibility: hidden;
+
+                &--open {
+                    visibility: visible;
+                }
+            }
+
+            &__dropdown {
+                background: swatch('background-white');
+                border: 1px solid swatch('stone', .15);
+                border-radius: 4px;
+                max-height: 0;
+                opacity: 1;
+                margin: auto;
+                position: relative;
+                left: -50%; // Counteracts the left attribute in &__dropdown-container to center.
+                white-space: nowrap;
+                opacity: 0;
+                padding: 15px 0;
+                visibility: hidden;
+                transition: visibility 0s linear, max-height 0.2s ease-in, opacity 0.1s ease-in;
+                min-width: 200px;
+                box-shadow: 0 7px 15px 0 swatch('black', .1); // Same as Maestro dropdown styles
+
+                &::before {
+                    content: "";
+                    background: swatch('background-white');
+                    display: block;
+                    top: -7px;
+                    margin: auto;
+                    left: 0;
+                    right: 0;
+                    position: absolute;
+                    border-top-left-radius: 4px;
+                    transform: rotate(45deg);
+                    width: 12px;
+                    height: 12px;
+                    border-top: 1px solid swatch('stone--sixteen');
+                    border-left: 1px solid swatch('stone--sixteen');
+                }
+
+                &--visible {
+                    opacity: 1;
+                    max-height: 100vh;
+                    visibility: visible;
+                    transition: visibility 0s linear, max-height 0.1s ease-in, opacity 0.2s ease-in;
+                }
+
+                &--custom-content {
+                    // If an engineer decides against using a link list inside the dropdown and plops
+                    // their own content in (sad panda image, for example), we'll add a padding that's
+                    // consistent with said link list.
+                    padding: 30px;
+                }
+            }
+
+            &__content-list {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            &__content-list-item {
+                width: 100%;
+            }
+
+            &__content-link {
+                // We're intentionally defining different colors for dropdown links
+                // (compared to the Supernav)
+                padding: 6px 30px 4px;
+                display: flex;
+                background-color: transparent;
+                width: 100%;
+                color: swatch('stone');
+                text-align: left;
+
+                &:hover {
+                    color: swatch('ink');
+                    background-color: swatch('chalk');
+                }
+
+                &:hover,
+                &:focus {
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+}
+
+@if $arbor-output-classes {
+    @include arbor-dropdown;
+}

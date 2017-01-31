@@ -1,0 +1,36 @@
+// Logo
+// =============================================================================
+@import "../core";
+
+@mixin arbor-logo (
+  $logo-height: 31px,
+  $logo-width: 34px,
+  $logo-class: "arbor-logo"
+) {
+    .#{$logo-class} {
+        @include flex-inline;
+        @include flex-align($y: 'baseline');
+
+        &__glyph {
+            height: $logo-height;
+            width: $logo-width;
+            padding: 0;
+        }
+
+        &__logotype {
+            margin-left: 6px;
+
+            &--dropbox {
+                width: 98px;
+            }
+
+            &--business {
+                width: 212px;
+            }
+        }
+    }
+}
+
+@if $arbor-output-classes {
+    @include arbor-logo;
+}

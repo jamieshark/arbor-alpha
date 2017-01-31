@@ -1,0 +1,34 @@
+// Super-Nav
+// =============================================================================
+@import "../core";
+
+@mixin arbor-image-links (
+  $side-padding: 15px
+) {
+    .image-links {
+        @include flex-align($self: 'stretch');
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        &__list-item {
+            @include type('copy-small');
+            @include flex-stack;
+            @include flex-align($self: 'stretch');
+            @include flex-align($y: 'middle', $flow: 'column');
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+        }
+
+        .image-link {
+            height: 100%;
+            padding: 0 $side-padding;
+            @include vcjc;
+        }
+    }
+}
+
+@if $arbor-output-classes {
+    @include arbor-image-links;
+}

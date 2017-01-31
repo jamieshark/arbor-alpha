@@ -1,0 +1,60 @@
+// Expandable nav
+// =============================================================================
+@import "../core";
+
+// Default Link Typography Sizes
+// =============================================================================
+@include type-set('link-text', base, ('font-size': 12px, 'line-height': (23/12), 'font-weight': 400));
+
+// Helper functions
+// =============================================================================
+
+@mixin arbor-expandable-child-nav (
+    $base-class: 'expandable-child-nav'
+) {
+    .#{$base-class} {
+        max-height: 0;
+        opacity: 0;
+        transition: max-height 0.2s ease-out, opacity 0.1s ease-out;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        position: relative;
+        z-index: 0;
+        visibility: hidden;
+
+        &__parent-link {
+            color: swatch(stone);
+
+            &--expanded {
+                color: swatch(stone--dark);
+            }
+        }
+
+        &--expanded {
+            max-height: 500px; // Subject to change
+            opacity: 1;
+            transition: max-height 0.2s ease-out, opacity 0.1s ease-out;
+            padding-bottom: spacing-get-value('medium');
+            visibility: visible;
+        }
+
+        .#{$base-class} {
+            &__link {
+                @include type('link-text');
+                color: swatch(stone--light);
+                width: 100%;
+                height: 100%;
+                display: inline-block;
+                padding: spacing-get-value('micro') 0;
+
+                &:hover,
+                &:focus {
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+}
+
+@include arbor-expandable-child-nav;

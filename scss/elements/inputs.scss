@@ -1,0 +1,254 @@
+// Inputs, Form Elements
+// =============================================================================
+@import "../core";
+
+// Default Input Typography Sizes
+// =============================================================================
+@include type-set('input-label', base, ('font-size': 12px, 'line-height': (23/12), 'font-weight': 200));
+@include type-set('input-text', base, ('font-size': 14px, 'line-height': (25/14), 'font-weight': 200));
+
+// used for sizing to determine padding for text inputs
+$arbor-input-font-size: 14px !default;
+
+// Default Colors
+// =============================================================================
+$arbor-input-error-label-color: swatch('cherry') !default;
+$arbor-input-focus-color: swatch('arbor-blue') !default;
+$arbor-input-border-color: swatch('stone--forty') !default;
+$arbor-input-disabled-color: swatch('stone--sixteen') !default;
+$arbor-input-disabled-background: swatch('stone--forty') !default;
+$arbor-input-select-background: swatch('background-white') !default;
+$arbor-input-radio-background: swatch('background-white') !default;
+
+// Based on the line height and font-size, determine padding for
+// text inputs to make the text appear centered
+@function _get-text-input-padding($font-size) {
+    $top-padding: $font-size / 4;
+    $side-padding: $font-size / 2;
+
+    @return $top-padding $side-padding;
+}
+
+@mixin _hide-standard-input {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+}
+
+@mixin arbor-input-label (
+    $is-error: false,
+    $is-text-label: false
+) {
+    @include type(input-label);
+
+    @if $is-error {
+        color: $arbor-input-error-label-color;
+        // so that error label is on its own line
+        @include arbor-item;
+        padding-top: 5px;
+    }
+    @else {
+        @if $is-text-label {
+            padding-bottom: 5px;
+        }
+    }
+}
+
+@mixin arbor-text-input (
+    $font-size: $arbor-input-font-size,
+    $border-radius: 4px,
+    $is-error: false,
+    $is-valid: false
+) {
+    @include type(input-text);
+    border: 1px solid $arbor-input-border-color;
+    padding: _get-text-input-padding($font-size);
+    border-radius: 4px;
+
+    &:focus {
+        border-color: $arbor-input-focus-color;
+        outline: none;
+    }
+
+    &:disabled {
+        background-color: $arbor-input-disabled-background;
+        color: $arbor-input-disabled-color;
+    }
+
+    @if $is-error {
+        background: url('/static/images/arbor/inputs/icon-error.svg') right ($font-size / 2) top 50% no-repeat;
+    }
+    @if $is-valid {
+        background: url('/static/images/arbor/inputs/icon-success.svg') right ($font-size / 2) top 50% no-repeat;
+    }
+}
+
+@mixin arbor-checkbox (
+    $size: 20px,
+    $is-disabled: false,
+    $is-valid: false
+) {
+    height: $size;
+    width: $size;
+    cursor: pointer;
+    transition: background .25s linear;
+    background: url('/static/images/arbor/inputs/checkbox-empty.svg') no-repeat;
+    background-size: $size;
+    padding-right: $size * 1.5; // space from label
+    @include flex-align($self: 'middle');
+
+    @if $is-disabled {
+        cursor: inherit;
+        background: url('/static/images/arbor/inputs/checkbox-disabled.svg') no-repeat;
+    }
+    @if $is-valid {
+        background: url('/static/images/arbor/inputs/checkbox-selected.svg') no-repeat;
+    }
+}
+
+@mixin arbor-radio (
+    $size: 20px,
+    $is-disabled: false,
+    $is-valid: false
+) {
+    height: $size;
+    width: $size;
+    cursor: pointer;
+    transition: opacity 0.1s ease-out, border 0.2s ease-out, box-shadow 0.15s ease-out;
+    background-color: $arbor-input-radio-background;
+    border-radius: 50%;
+    border: 1px solid $arbor-input-border-color;
+    margin-right: $size / 2; // space from label;
+    @include flex-align($self: 'middle');
+
+    &:hover,
+    &:focus {
+        border: 1px solid $arbor-input-focus-color;
+        outline: none;
+    }
+
+    @if $is-disabled {
+        cursor: inherit;
+        pointer-events: none;
+        background-color: $arbor-input-disabled-background;
+    }
+    @if $is-valid {
+        border: 1px solid $arbor-input-focus-color;
+        box-shadow: inset 0 0 0 4px $arbor-input-focus-color;
+    }
+}
+
+@mixin arbor-select (
+    $height: 40px,
+    $font-size: $arbor-input-font-size,
+    $is-disabled: false
+) {
+    min-height: $arbor-input-font-size * 2.5;
+    height: $height;
+    cursor: pointer;
+    background: $arbor-input-select-background;
+    border: 1px solid $arbor-input-border-color;
+    padding: _get-text-input-padding($font-size);
+
+    background: url("/static/images/arbor/inputs/select-arrow.svg") no-repeat white;
+    background-position: right $arbor-input-font-size center;
+    box-sizing: border-box;
+    appearance: none;
+    @include type('input-text');
+
+    @if $is-disabled {
+        cursor: inherit;
+        background-color: $arbor-input-disabled-background;
+        color: $arbor-input-disabled-color;
+        pointer-events: none;
+    }
+}
+
+
+@mixin arbor-inputs (
+    $input-class: 'input',
+    $label-class: 'label',
+    $text-class: 'text',
+    $checkbox-class: 'checkbox',
+    $radio-class: 'radio',
+    $select-class: 'select',
+    $valid-class: 'valid',
+    $error-class: 'error',
+    $hide-standard-inputs: true
+) {
+
+    .#{$input-class} {
+        &__#{$label-class}-container {
+            @include arbor-item($shrink: true);
+            &--stack {
+                @include flex-stack;
+            }
+            @if $hide-standard-inputs {
+                input[type="checkbox"],
+                input[type="radio"] {
+                    @include _hide-standard-input;
+                }
+            }
+        }
+        &__#{$label-class} {
+            @include arbor-input-label;
+
+            &--#{$error-class} {
+                @include arbor-input-label($is-error: true);
+            }
+            &--before {
+                @include arbor-input-label($is-text-label: true);
+            }
+        }
+
+        &__#{$text-class} {
+            @include arbor-text-input;
+
+            &::-ms-reveal {
+                // space for the password strength indicator which appears on most password inputs
+                margin-right: 18px;
+            }
+            &--#{$error-class} {
+                @include arbor-text-input($is-error: true);
+            }
+            &--#{$valid-class} {
+                @include arbor-text-input($is-valid: true);
+            }
+
+        }
+
+        &__#{$checkbox-class} {
+            @include arbor-checkbox;
+
+            &--disabled {
+                @include arbor-checkbox($is-disabled: true);
+            }
+            &--#{$valid-class} {
+                @include arbor-checkbox($is-valid: true);
+            }
+        }
+
+        &__#{$radio-class} {
+            @include arbor-radio;
+
+            &--disabled {
+                @include arbor-radio($is-disabled: true);
+            }
+            &--#{$valid-class} {
+                @include arbor-radio($is-valid: true);
+            }
+        }
+
+        &__#{$select-class} {
+            @include arbor-select;
+
+            &--disabled {
+                @include arbor-select($is-disabled: true);
+            }
+        }
+    }
+}
+
+@if $arbor-output-classes {
+    @include arbor-inputs;
+}

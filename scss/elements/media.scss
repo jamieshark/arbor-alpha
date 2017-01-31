@@ -1,0 +1,92 @@
+@import "../core";
+
+// Aligned Media
+// =============================================================================
+// these mixins are used to align an asset with some copy
+// the default behavior is for the media to stack on a specified breakpoint
+
+
+@mixin arbor-media (
+  $media-class: 'media',
+  $image-class: 'image',
+  $caption-class: 'caption',
+  $columns: 24
+) {
+
+  .#{$media-class} {
+    &__#{$image-class} {
+      @include arbor-item($shrink: true);
+      img {
+        @include arbor-reset-img($width: auto)
+      }
+    }
+
+    &__#{$caption-class} {
+      @include arbor-item;
+    }
+
+    @each $breakpoint-name, $min-width in $-arbor-breakpoints {
+      @include breakpoint($breakpoint-name) {
+        $breakpoint-class: "--#{$breakpoint-name}";
+
+        @if _breakpoint-is-zero($breakpoint-name) {
+          $breakpoint-class: null;
+        }
+
+        // fractional sizes for caption
+        &__#{$caption-class}#{$breakpoint-class} {
+          @for $i from 1 through $columns {
+            $percent: percentage($i / $columns);
+            $reduced: _reduceFraction($i, $columns);
+            $fraction: #{nth($reduced, 1)}-#{nth($reduced, 2)};
+            @if $percent != 100% {
+              &--#{$fraction} {
+                @include arbor-item-percent($pct: $percent);
+              }
+            }
+          }
+        }
+
+        &#{$breakpoint-class}--expand {
+          @include arbor-item;
+        }
+
+        &#{$breakpoint-class}--shrink {
+          @include arbor-item($shrink: true);
+        }
+
+        &#{$breakpoint-class}--fluid {
+          @include arbor-item-fluid;
+        }
+
+        // vertical center, justify center
+        &#{$breakpoint-class}--vcjc {
+          @include vcjc;
+        }
+        // x align, assuming row flow
+        @each $align-name, $alignment in $flex-align-x {
+          &#{$breakpoint-class}--x-#{$align-name} {
+            @include flex-align($x: $align-name);
+          }
+        }
+        // y align, self align
+        @each $align-name, $alignment in $flex-align-y {
+          &#{$breakpoint-class}--y-#{$align-name} {
+            @include flex-align($y: $align-name);
+          }
+          &#{$breakpoint-class}--self-#{$align-name} {
+            @include flex-align($self: $align-name);
+          }
+        }
+
+        &#{$breakpoint-class}--first {
+          order: -1;
+        }
+      }
+    }
+  }
+}
+
+@if $arbor-output-classes {
+    @include arbor-media;
+}

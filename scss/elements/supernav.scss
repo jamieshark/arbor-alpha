@@ -1,0 +1,345 @@
+// Super-Nav
+// =============================================================================
+@import "../core";
+
+// Default Link Typography Sizes
+// =============================================================================
+@include type-set(link-text, base, (font-size: 14px, line-height: 1.65, font-weight: 400, padding: 0, color: swatch('arbor-blue')));
+
+// Default Colors
+// =============================================================================
+$arbor-supernav-underline-color: swatch('arbor-blue') !default;
+$arbor-supernav-background-color: swatch('background-white') !default;
+$arbor-supernav-focus-color: swatch('ink') !default;
+$arbor-supernav-selected-color: swatch('ink') !default;
+$arbor-supernav-text-color: swatch('stone') !default;
+$arbor-supernav-expanded-border-color: swatch('arbor-blue') !default;
+$arbor-supernav-box-shadow-color: swatch('stone', 0.15) !default;
+
+// Helper functions
+// =============================================================================
+
+// Based on the logo height and the font size of the links in the bar, determine
+// how offset the logo should be from the header
+@function get-logo-image-padding($logo-height, $scale) {
+    $side-padding: $logo-height / $scale;
+
+    @return 0 $side-padding;
+}
+
+@mixin arbor-tab-pseudo-underline($visible: false) {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    height: 0;
+    width: 100%;
+    background: transparent;
+    transition: height .3s ease, background-color .5s ease;
+
+    @if $visible {
+        background: $arbor-supernav-underline-color;
+        height: 2px;
+    }
+}
+
+// Super Nav Mixin
+
+// Sections are the main building blocks. You can either manually center content by adding the '--center'
+// modifier. The last section is always aligned to the right. So if you only have one section block, you
+// have to put the center modifier
+// Accounts for both left-aligned logo and centered-logo
+// Generally, the header is divided up to three event parts, the first section being left aligned,
+// the second being centered, and the third being right-aligned.
+// In the case the header does not have three sections, a class is added so that they take on a width
+// of 1/3 and then the parent aligns them accordingly
+@mixin arbor-supernav (
+  $supernav-class: 'supernav',
+  $container-class: 'container',
+  $link-class: 'link',
+  $section-class: 'section',
+  $logo-class: 'logo',
+  $max-width: null,
+  $height: 80px,
+  $logo-height: 26px,
+  $side-padding: 15px
+) {
+    .#{$supernav-class} {
+        &__fixed-dummy {
+            position: relative;
+            width: 100%;
+            height: $height;
+        }
+    }
+    .#{$supernav-class}__#{$container-class} {
+        @include flex-stack;
+        box-shadow: 0 1px 4px 0 $arbor-supernav-box-shadow-color;
+        position: relative;
+        z-index: 9998; // Ensures that the header is above the element below so the shadow shows
+        background: $arbor-supernav-background-color;
+
+        &--expanded {
+            box-shadow: none;
+            border-bottom: 1px solid $arbor-supernav-expanded-border-color;
+
+            @include breakpoint(large) {
+                border-bottom: none;
+                box-shadow: 0 1px 4px 0 $arbor-supernav-box-shadow-color;
+            }
+        }
+
+        &--fixed {
+            position: fixed;
+            top: 0;
+            width: 100%;
+        }
+
+        .#{$supernav-class} {
+            @include arbor-container(
+                $contain: true,
+                $max-width: $max-width
+            );
+            height: $height;
+            padding: 0 $side-padding;
+
+            a:hover {
+                text-decoration: none;
+            }
+
+            &--x-right {
+                @include flex-align($x: 'right');
+            }
+            &--x-center {
+                @include flex-align($x: 'center');
+            }
+            &--x-bookend {
+                @include flex-align($x: 'bookend');
+            }
+
+            &__#{$section-class} {
+                @include arbor-item-fluid;
+                @include flex-align($y: 'middle');
+
+                // last section aligns items to the end
+                &:last-child {
+                    @include flex-align($x: 'right');
+                };
+
+                align-content: stretch; // Override make it look pretty later
+
+                // this class is used to help left align the logo
+                // without changing the markup
+                // last-child is for specificity
+                &--x-left, &--x-left:last-child {
+                    order: -1;
+                    @include arbor-item($shrink: true);
+                    @include flex-align($x: 'left');
+                }
+
+                &--x-left {
+                    .arbor-logo {
+                        margin-left: 6px; // One-off design decision to increase space between logo + edge
+                    }
+                }
+
+                // centered sections center their content
+                // last-child is for when a centered section
+                // exists on its own
+                &--center, &--center:last-child {
+                    @include arbor-item($shrink: true);
+                    @include flex-align($x: 'center');
+                }
+
+                // if there aren't at least 3 header sections
+                // maintain that they take up 1/3 of the header space
+                &--1-3 {
+                    flex: 0 percentage(1/3);
+                }
+
+                .button {
+                    display: none;
+
+                    @include breakpoint(large) {
+                        display: flex;
+                        margin-left: $side-padding;
+                        margin-right: 6px; // One-off specification from design. This prevents the
+                        // button from looking too close to the right edge of the supernav
+                        transition: .25s border, .25s background, .25s color; // Adds a smooth
+                        // transition when going between primary + secondary button styles
+
+                        &:hover,
+                        &:focus {
+                            transition: none;
+                            text-decoration: none;
+                        }
+                    }
+                }
+            }
+
+            &__section-list {
+                display: none;
+
+                @include breakpoint(large) {
+                    display: flex;
+                    margin: 0;
+                    padding: 0;
+                    list-style: none;
+                    @include flex-align($self: 'stretch');
+                }
+            }
+
+            &__list-item {
+                @include flex-stack;
+                @include flex-align($self: 'stretch');
+                @include flex-align($y: 'middle', $flow: 'column');
+                margin: 0; // So flexbox can handle the alignment
+                text-align: center;
+
+                &:last-child { // This block forces the right-most dropdown to be positioned to the
+                    // right of its parent if there is no CTA. This ensures that all the dropdown
+                    // is seen without being cropped
+                    .dropdown__container--no-cta {
+                        .dropdown__dropdown-container {
+                            left: inherit;
+                            right: 0;
+                            margin-right: $side-padding;
+                        }
+
+                        .dropdown__dropdown {
+                            left: 0;
+
+                            &::before {
+                                right: -160px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            &__#{$link-class} {
+                @include type('link-text');
+                color: $arbor-supernav-text-color;
+                text-decoration: none;
+                max-width: 150px; // Longer-language support.
+                padding: 0 $side-padding;
+                @include vcjc;
+                height: 100%;
+                display: flex;
+
+                &:hover,
+                &:focus {
+                    color: $arbor-supernav-focus-color;
+                    text-decoration: none;
+                }
+
+                &--selected {
+                    color: $arbor-supernav-selected-color;
+
+                    &:after {
+                        @include arbor-tab-pseudo-underline($visible: true);
+                    }
+                }
+            }
+
+            .hamburger-helper {
+                padding-right: 6px;
+            }
+        }
+
+        // Temporary styles that replicates the legacy header UI. This is part of the header
+        // rollout for Business
+        &--legacy-ui {
+            // Supernav links (large screens)
+            .#{$supernav-class}__#{$link-class} {
+                color: swatch('arbor-blue');
+
+                &:hover,
+                &:focus {
+                    color: swatch('arbor-blue--dark');
+                }
+            }
+
+            // Image links
+            .image-link {
+                &:hover {
+                    .image-link__text {
+                        color: swatch('arbor-blue--dark');
+                    }
+                }
+
+                &__text {
+                    color: swatch('arbor-blue');
+                }
+            }
+
+            // Dropdown links (large screens)
+            .dropdown__container {
+                .dropdown__link,
+                .dropdown__content-link {
+                    color: swatch('arbor-blue');
+
+                    &:hover,
+                    &:focus {
+                        color: swatch('arbor-blue--dark');
+                    }
+                }
+
+                .dropdown__link {
+                    &::after {
+                        border-top: 5px solid swatch('arbor-blue');
+                    }
+
+                    &:hover {
+                        &::after {
+                            border-top: 5px solid swatch('arbor-blue--dark');
+                        }
+                    }
+
+                    &--open {
+                        color: swatch('arbor-blue--dark');
+                    }
+                }
+            }
+
+            // Button on large screen
+            .button--secondary {
+                border: 1px solid swatch('arbor-blue');
+
+                &:hover,
+                &:focus {
+                    text-decoration: none;
+                }
+
+                &:hover {
+                    background: swatch('arbor-blue--eight');
+                }
+            }
+
+            // Mobile nav
+            .hamburger-menu {
+                .hamburger-menu__link {
+                    color: swatch('arbor-blue');
+
+                    &:hover,
+                    &:focus {
+                        color: swatch('arbor-blue--dark');
+                    }
+                }
+            }
+
+            // Mobile dropdown link
+            .expandable-child-nav {
+                .expandable-child-nav__link {
+                    color: swatch('arbor-blue');
+                }
+            }
+
+        }
+        // End overrides for legacy-ui
+    }
+}
+
+@if $arbor-output-classes {
+    @include arbor-supernav;
+}

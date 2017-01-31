@@ -1,0 +1,93 @@
+@import "../core";
+
+// Footer
+// =============================================================================
+
+@include type-set(footer-link, base, ('font-size': 14px, 'line-height': (32/14), 'font-weight': 400));
+@include type-set(footer-headline, base, ('font-size': 20px, 'line-height': (36/20), 'font-weight': 400));
+
+// Default Colors
+// =============================================================================
+$arbor-footer-bg: swatch('chalk') !default;
+$arbor-footer-text-color: swatch('stone') !default;
+$arbor-footer-hover-color: swatch('stone--dark') !default;
+$arbor-footer-border: swatch('stone--sixteen') !default;
+
+// Footer Mixin
+@mixin arbor-footer (
+  $footer-class: 'footer',
+  $group-list-class: 'group-list',
+  $group-list-item-class: 'group-list-item',
+  $link-list-class: 'link-list',
+  $link-list-item-class: 'link-list-item',
+  $link-class: 'link',
+  $headline-class: 'headline',
+  $max-width: 990px
+) {
+    .#{$footer-class} {
+      @include arbor-container;
+      background-color: $arbor-footer-bg;
+      flex-direction: column;
+      padding: 200px 0 60px;
+
+      &__#{$headline-class},
+      &__#{$link-class} {
+        color: $arbor-footer-text-color;
+        &:hover, &:active {
+          color: $arbor-footer-hover-color;
+          text-decoration: none;
+        }
+      }
+
+      &__#{$group-list-class},
+      &__#{$link-list-class} {
+        @include arbor-reset-list();
+      }
+
+
+      &__#{$group-list-class} {
+        @include breakpoint(medium) {
+            @include arbor-container(
+                $contain: true,
+                $max-width: $max-width
+            );
+            justify-content: space-between;
+        }
+        border-top: 1px solid $arbor-footer-border;
+      }
+
+      &__#{$headline-class} {
+        @include type(footer-headline);
+      }
+
+
+      // Button overrides
+      button {
+        @include arbor-reset-button;
+      }
+
+      &--minimal {
+        .#{$footer-class}__#{$group-list-class} {
+          padding-top: 60px;
+          position: relative;
+
+          .locale-selector-item {
+            #locale-container {
+              margin-top: 0;
+              padding-top: 0;
+              #locale-link {
+                img.s_web_globe_gray_20x20 {
+                    margin: 0 4px 0 0;
+                }
+              }
+            }
+          }
+        }
+      }
+
+    }
+}
+
+@if $arbor-output-classes {
+    @include arbor-footer;
+}

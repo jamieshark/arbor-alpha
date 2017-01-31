@@ -1,0 +1,94 @@
+// Expandable nav
+// =============================================================================
+@import "../core";
+
+// Default Link Typography Sizes
+// =============================================================================
+@include type-set(link-text, base, (font-size: 14px, line-height: 1.65, font-weight: 400, padding: 0, color: swatch('arbor-blue')));
+
+// Default Colors
+// =============================================================================
+$arbor-expandable-nav-link-color: swatch('stone') !default;
+$arbor-expandable-nav-hamburger-border: swatch('stone--forty') !default;
+$arbor-expandable-nav-list-item-border: swatch('stone--sixteen', .1) !default;
+
+// Helper functions
+// =============================================================================
+
+@mixin arbor-expandable-nav {
+    .hamburger-menu {
+        border-top: 1px solid $arbor-expandable-nav-hamburger-border;
+        max-height: 0;
+        opacity: 0;
+        transition: max-height 0.2s ease-out, opacity 0.1s ease-out;
+        visibility: hidden;
+
+        &--expanded {
+            max-height: 1000px; // Subject to change
+            opacity: 1;
+            transition: max-height 0.2s ease-out, opacity 0.1s ease-out;
+            visibility: visible;
+        }
+
+        .hamburger-menu {
+            &__list-container {
+                padding: 0 spacing-get-value('medium');
+                @include flex-stack;
+            }
+
+            &__list {
+                padding: 0;
+                margin: 0;
+                list-style: none;
+            }
+
+            &__list-item {
+                border-top: 1px solid $arbor-expandable-nav-list-item-border;
+                position: relative;
+                z-index: 1;
+
+                &:first-child {
+                    border-top: none;
+                }
+            }
+
+            &__link {
+                @include type('link-text');
+                color: $arbor-expandable-nav-link-color;
+                padding: 18px 0; // Odd number, but we want the total height to be 60 and this gets us close
+                width: 100%;
+                height: 100%;
+                display: inline-block;
+
+                &:hover {
+                    color: swatch(ink);
+                }
+
+                &:hover,
+                &:focus {
+                    text-decoration: none;
+                }
+            }
+        }
+
+        .button {
+            width: 100%;
+            display: inline-block;
+            margin-top: spacing-get-value('micro');
+            max-width: 480px;
+            text-align: center;
+            align-self: center;
+            text-decoration: none;
+            margin-bottom: spacing-get-value('medium');
+
+            &:hover,
+            &:focus {
+                text-decoration: none;
+            }
+        }
+    }
+}
+
+@if $arbor-output-classes {
+    @include arbor-expandable-nav;
+}

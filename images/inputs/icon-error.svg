@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="14px" height="13px" viewBox="0 0 14 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 39.1 (31720) - http://www.bohemiancoding.com/sketch -->
+    <title>alert-icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="✅-Forms-(snippet-treatment-shown-here)" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Forms" transform="translate(-652.000000, -1075.000000)" fill="#F22322">
+            <g id="Group" transform="translate(400.000000, 1031.000000)">
+                <path d="M263.48224,56.9600934 C265.695375,56.9600934 266.603881,55.3972799 265.51804,53.4810895 L260.960911,45.4390974 C259.872117,43.5176966 258.103881,43.522907 257.01804,45.4390974 L252.460911,53.4810895 C251.372117,55.4024903 252.276642,56.9600934 254.496711,56.9600934 L263.48224,56.9600934 Z M259.989475,54.9600934 L257.989475,54.9600934 L257.989475,52.9600934 L259.989475,52.9600934 L259.989475,54.9600934 L259.989475,54.9600934 Z M259.989475,51.9600934 L257.989475,51.9600934 L257.989475,47.9600934 L259.989475,47.9600934 L259.989475,51.9600934 L259.989475,51.9600934 Z" id="alert-icon"></path>
+            </g>
+        </g>
+    </g>
+</svg>
